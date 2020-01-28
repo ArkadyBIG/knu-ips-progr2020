@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 
-
+ namespace lesson_k18_2020_01_28 {
 struct Snowman {
 	std::string name;
 	int num_eyes;
@@ -77,5 +77,5 @@ int main() {
 	save_to_binary(sman,"database.bin");
 	return 0;
 }
-
+}
 
