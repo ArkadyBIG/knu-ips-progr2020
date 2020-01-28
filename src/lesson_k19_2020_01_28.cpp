@@ -40,12 +40,19 @@ void write_text_file(Person person, std::string file_path) {
 	file.close();
 }
 
-void edit_text_file(std::string path, Person person) {
+void refresh_file(std::string file_path) {
+	std::ofstream file(file_path);
+	file.close();
+}
+
+void edit_text_file(std::string file_path, Person person) {
 
 }
 
 int main() {
 	std::cout<<"hello world"<<std::endl;
+	refresh_file("text.txt");
+	std::cout<<"file refreshed"<<std::endl;
 	write_text_file(Person("First Person",5,50,Gender::GMAIL),"text.txt");
 	write_text_file(Person("Second Person",50,5,Gender::GMAIL),"text.txt");
 	return 0;
