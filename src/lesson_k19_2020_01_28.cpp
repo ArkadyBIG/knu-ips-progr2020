@@ -6,6 +6,7 @@
  */
 #include <string>
 #include <iostream>
+#include <fstream>
 
 enum Gender { MALE, FEMALE, GMAIL };
 
@@ -21,11 +22,20 @@ struct Person {
 		this->height = height;
 		this->gender = gender;
 	}
-
 };
+
+void write_text_file(Person person, std::string file_path) {
+	std::ofstream file(file_path);
+	file << person.name << std::endl;
+	file << person.age << std::endl;
+	file << person.height << std::endl;
+	file << person.gender << std::endl;
+	file.close();
+}
 
 int main() {
 	std::cout<<"hello world"<<std::endl;
+	write_text_file(Person("First Person",5,50,Gender::GMAIL),"text.txt");
 	return 0;
 }
 
