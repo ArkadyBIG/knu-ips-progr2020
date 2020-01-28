@@ -32,11 +32,11 @@ int Person::max_id = 0;
 
 void write_text_file(Person person, std::string file_path) {
 	std::ofstream file(file_path, std::ios_base::app);
-	file << person.id << std::endl;
-	file << person.name << std::endl;
-	file << person.age << std::endl;
-	file << person.height << std::endl;
-	file << person.gender << std::endl;
+	file << "id=" << person.id << std::endl;
+	file << "name=" <<person.name << std::endl;
+	file << "age=" <<person.age << std::endl;
+	file << "height=" <<person.height << std::endl;
+	file << "gender=" <<person.gender << std::endl;
 	file.close();
 }
 
@@ -45,7 +45,13 @@ void refresh_file(std::string file_path) {
 	file.close();
 }
 
-void edit_text_file(std::string file_path, Person person) {
+void edit_text_file(std::string file_path, int id, Person person) {
+	std::fstream file(file_path);
+	std::string line;
+	while(getline(file,line)) {
+		int line_id = std::stoi(line);
+
+	}
 
 }
 
