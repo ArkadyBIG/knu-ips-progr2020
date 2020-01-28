@@ -31,7 +31,7 @@ struct Person {
 int Person::max_id = 0;
 
 void write_text_file(Person person, std::string file_path) {
-	std::ofstream file(file_path);
+	std::ofstream file(file_path, std::ios_base::app);
 	file << person.id << std::endl;
 	file << person.name << std::endl;
 	file << person.age << std::endl;
