@@ -36,6 +36,26 @@ void save_to_txt(Snowman sman, std::string file_path) {
 	file.close();
 }
 
+void save_to_binary(Snowman sman, std::string file_path) {
+	std::ofstream file(file_path, std::ios::app | std::ios::binary);
+	if ( ! file.is_open()) {
+		std::cout<<"can't open file "<<file_path<<std::endl;
+		return;
+	}
+	int name_length = sman.name.length();
+	file.write((char*)&name_length,sizeof(name_length));
+	file << sman.name;
+	file.write((char*)&sman.num_eyes,sizeof(sman.num_eyes));
+	file.write((char*)&sman.has_bucket,sizeof(sman.has_bucket));
+	file.write((char*)&sman.carrot_length,sizeof(sman.carrot_length));
+	file.write((char*)&sman.num_balls,sizeof(sman.num_balls));
+
+	for (int i=0; i<sman.num_balls; i++) {
+		file.write((char*)&sman.ball_radiuses[i],sizeof(sman.ball_radiuses[i]));
+	}
+	file.close();
+}
+
 
 int main() {
 	srand(time(nullptr));
@@ -54,6 +74,7 @@ int main() {
 	}
 	std::cout<<"Snowman Joe created"<<std::endl;
 	save_to_txt(sman,"database.txt");
+	save_to_binary(sman,"database.bin");
 	return 0;
 }
 
