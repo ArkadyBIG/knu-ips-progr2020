@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+namespace k19_2020_01_28 {
 enum Gender { MALE, FEMALE, GMAIL };
 
 struct Person {
@@ -80,6 +80,8 @@ int main() {
 	write_text_file(Person("Second Person",50,5,Gender::GMAIL),"text.txt");
 	edit_text_file("text.txt",0,Person("First Person",5,55,Gender::MALE));
 	return 0;
+}
+
 }
 
 
