@@ -50,11 +50,16 @@ void write_text_file(Person person, std::string file_path) {
 
 void write_binary_file(Person person, std::string file_path) {
 	std::ofstream file(file_path, std::ios_base::app | std::ios_base::binary);
-	std::size_t size = sizeof(person);
-	std::cout<<"size = "<<size<<std::endl;
+	file.write((char*)&(person.id), sizeof( person.id ));
+	std::size_t size = person.name.size();
 	file.write((char*)&size, sizeof( size ));
+	const char* buffer = person.name.c_str();
+	file.write(buffer, size);
+	file.write((char*)&(person.age), sizeof( person.age ));
+	file.write((char*)&(person.height), sizeof( person.height ));
+	file.write((char*)&(person.gender), sizeof( person.gender ));
 
-	file.write((char*)&person,sizeof(person));
+
 //	file << "id=" << person.id << std::endl;
 //	file << "name=" <<person.name << std::endl;
 //	file << "age=" <<person.age << std::endl;
@@ -67,13 +72,23 @@ std::vector<Person> read_binary_file(std::string file_path) {
 	std::vector<Person> result;
 	std::ifstream file(file_path, std::ios_base::binary);
 	while(!file.eof()) {
+		Person person;
+		file.read((char*)&(person.id),sizeof(person.id));
+		std::cout<<person.id<<std::endl;
+		if (file.eof()) { break; }
 		std::size_t size;
 		file.read((char*)&size,sizeof(size));
-		if (file.eof()) { break; }
 		std::cout<<"size = "<<size<<std::endl;
-		Person person;
-		file.read((char*)&person,size);
+		char* buffer = new char[size+1];
+		file.read(buffer, size);
+		buffer[size]='\0';
+		person.name = buffer;
+		std::cout<<person.name<<std::endl;
+		file.read((char*)&(person.age), sizeof( person.age ));
+		file.read((char*)&(person.height), sizeof( person.height ));
+		file.read((char*)&(person.gender), sizeof( person.gender ));
 		result.push_back(person);
+
 	}
 	//result.pop_back();
 	return result;
@@ -114,6 +129,9 @@ void edit_text_file(std::string file_path, int id, Person person) {
 
 int main() {
 	std::cout<<"hello world"<<std::endl;
+	std::cout<<"sizeof person"<< sizeof(Person)<<std::endl;
+	std::cout<<"sizeof string"<< sizeof(std::string)<<std::endl;
+
 	refresh_file("binary.bin");
 	write_binary_file(Person("First Person",5,50,Gender::MALE),"binary.bin");
 	write_binary_file(Person("Second Person",50,5,Gender::FEMALE),"binary.bin");
@@ -130,7 +148,23 @@ int main() {
 		std::cout << "gender=" <<person.gender << std::endl;
 	}
 
-	write_binary_file(Person("Third Person",10,10,Gender::MALE),"binary.bin");
+	write_binary_file(Person("Third Person with a really long and really really long name to test how it works",10,10,Gender::MALE),"binary.bin");
+	std::cout<<"written to binary"<<std::endl;
+	persons = read_binary_file("binary.bin");
+	std::cout<<persons.size()<<std::endl;
+	for(const auto& person:persons) {
+		std::cout << "id=" << person.id << std::endl;
+		std::cout << "name=" <<person.name << std::endl;
+		std::cout << "age=" <<person.age << std::endl;
+		std::cout << "height=" <<person.height << std::endl;
+		std::cout << "gender=" <<person.gender << std::endl;
+	}
+	std::string name = "test name";
+	for (int i=0; i < 10; i++) {
+		write_binary_file(Person(name,10*i+5,100*i+30,Gender::GMAIL),"binary.bin");
+		name += " some long string ";
+	}
+
 	std::cout<<"written to binary"<<std::endl;
 	persons = read_binary_file("binary.bin");
 	std::cout<<persons.size()<<std::endl;
