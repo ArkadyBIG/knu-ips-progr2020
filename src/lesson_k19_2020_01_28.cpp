@@ -7,7 +7,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-namespace k19_2020_01_28 {
+#include <vector>
+//namespace k19_2020_01_28 {
 enum Gender { MALE, FEMALE, GMAIL };
 
 struct Person {
@@ -17,6 +18,8 @@ struct Person {
 	int age;
 	double height; // in cm
 	Gender gender = Gender::GMAIL;
+
+	Person() = default;
 
 	Person(std::string name,int age, double height, Gender gender) {
 		this->name = name;
@@ -38,6 +41,31 @@ void write_text_file(Person person, std::string file_path) {
 	file << "height=" <<person.height << std::endl;
 	file << "gender=" <<person.gender << std::endl;
 	file.close();
+}
+
+void write_binary_file(Person person, std::string file_path) {
+	std::ofstream file(file_path, std::ios_base::app | std::ios_base::binary);
+	file.write((char*)sizeof(person), sizeof( sizeof(person) ));
+
+	file.write((char*)&person,sizeof(person));
+//	file << "id=" << person.id << std::endl;
+//	file << "name=" <<person.name << std::endl;
+//	file << "age=" <<person.age << std::endl;
+//	file << "height=" <<person.height << std::endl;
+//	file << "gender=" <<person.gender << std::endl;
+	file.close();
+}
+
+std::vector<Person> read_binary_file(std::string file_path) {
+	std::vector<Person> result;
+	std::ifstream file(file_path, std::ios_base::binary);
+	while(!file.eof()) {
+		Person person;
+		file.read((char*)&person,sizeof(person));
+		result.push_back(person);
+	}
+	return result;
+
 }
 
 void refresh_file(std::string file_path) {
@@ -74,6 +102,15 @@ void edit_text_file(std::string file_path, int id, Person person) {
 
 int main() {
 	std::cout<<"hello world"<<std::endl;
+	write_binary_file(Person("First Person",5,50,Gender::GMAIL),"binary.bin");
+	write_binary_file(Person("Second Person",50,5,Gender::GMAIL),"binary.bin");
+	std::cout<<"written to binary"<<std::endl;
+	std::vector<Person> persons = read_binary_file("binary.bin");
+	std::cout<<persons.size()<<std::endl;
+
+	return 0;
+
+
 	refresh_file("text.txt");
 	std::cout<<"file refreshed"<<std::endl;
 	write_text_file(Person("First Person",5,50,Gender::GMAIL),"text.txt");
@@ -82,6 +119,6 @@ int main() {
 	return 0;
 }
 
-}
+//}
 
 
