@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-//namespace k19_2020_01_28 {
+namespace k19_2020_01_28 {
 enum Gender { MALE, FEMALE, GMAIL };
 
 struct Person {
@@ -186,6 +186,6 @@ int main() {
 	return 0;
 }
 
-//}
+}
 
 

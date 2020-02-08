@@ -6,7 +6,7 @@
  */
 #include <iostream>
 
- namespace lesson_k18_2020_01_29 {
+namespace lesson_k18_2020_01_29 {
 struct ListNode {
 	int value;
 	ListNode* prev;
