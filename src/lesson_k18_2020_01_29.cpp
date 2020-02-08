@@ -20,7 +20,7 @@ struct ListNode {
 struct List {
 	ListNode* head;
 	ListNode* tail;
-	size_t length;
+	std::size_t length;
 
 	List() {
 		head = nullptr;
