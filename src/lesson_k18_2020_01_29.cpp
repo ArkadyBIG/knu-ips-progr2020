@@ -41,6 +41,17 @@ struct List {
 	}
 };
 
+std::ostream& operator<<(std::ostream& out, const List& list) {
+	out<<"List of length "<<list.length<<std::endl;
+	ListNode* cur = list.head;
+	std::size_t i = 0;
+	while (cur) {
+		out<<"  at index "<<i<<": item "<<cur->value<<std::endl;
+		cur = cur->next;
+		i++;
+	}
+	return out;
+}
 
 
 int main() {
@@ -49,7 +60,7 @@ int main() {
 	my_list.push_back(322);
 	std::cout<<"List head: "<<my_list.head->value
 			<<"List tail: "<<my_list.tail->value<<std::endl;
-
+	std::cout<<my_list;
 	return 0;
 }
 
