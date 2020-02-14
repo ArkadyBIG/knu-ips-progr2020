@@ -78,6 +78,15 @@ void merge_sort_topdown(int* array, std::size_t size) {
 	int * destination = new int[size];
 	std::copy(array, array+size, destination);
 	merge_sort_twoarrays(destination, array, 0, size);
+	delete [] destination;
+}
+
+void test_memory_leaks() {
+	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1, -12345};
+	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
+	while (true) {
+		merge_sort_topdown(test_array, size);
+	}
 }
 
 
@@ -92,6 +101,9 @@ int main() {
 		std::cout<<i<<" ";
 	}
 	std::cout<<std::endl;
+
+//	std::cout<<"test for memory leaks"<<std::endl;
+//	test_memory_leaks();
 
 
 	return 0;
