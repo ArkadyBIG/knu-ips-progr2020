@@ -31,7 +31,7 @@ void insertion_sort_smarter(int* array, std::size_t size) {
 }
 
 void shell_sort(int* array, std::size_t size) {
-	static const int gaps[] = {701, 301, 132, 57, 23, 10, 4, 1 };
+	static const std::size_t gaps[] = {701, 301, 132, 57, 23, 10, 4, 1 };
 
 	for(auto gap: gaps) {
 		int temp;
@@ -47,12 +47,47 @@ void shell_sort(int* array, std::size_t size) {
 }
 
 
+
+
+
+void merge_topdown(int* source, int* destination, std::size_t begin, std::size_t middle, std::size_t end) {
+	std::size_t first=begin, second = middle;
+	for (std::size_t i = begin; i<end; i++) {
+		if ((first<middle) && (second>=end || source[first]<=source[second])) {
+			destination[i]=source[first];
+			first++;
+		} else {
+			destination[i]=source[second];
+			second++;
+		}
+	}
+}
+
+
+void merge_sort_twoarrays(int* source, int* destination, std::size_t begin, std::size_t end) {
+	if (end-begin<2) {
+		return;
+	}
+	std::size_t middle = (end + begin)/2;
+	merge_sort_twoarrays(destination, source,begin,middle);
+	merge_sort_twoarrays(destination, source,middle,end);
+	merge_topdown(source, destination, begin, middle, end);
+}
+
+void merge_sort_topdown(int* array, std::size_t size) {
+	int * destination = new int[size];
+	std::copy(array, array+size, destination);
+	merge_sort_twoarrays(destination, array, 0, size);
+}
+
+
 int main() {
 
-	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1};
+	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1, -12345};
 	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
 	//shell_sort(test_array, size);
-	insertion_sort_smarter(test_array, size);
+	//insertion_sort_smarter(test_array, size);
+	merge_sort_topdown(test_array, size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
