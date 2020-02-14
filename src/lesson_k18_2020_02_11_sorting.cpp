@@ -7,6 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstddef>
+#include <ctime>
 
 namespace lesson_k18_2020_02_11_sorting {
 
@@ -103,6 +104,28 @@ void test_memory_leaks() {
 	}
 }
 
+void compare_merge_sorts(std::size_t size) {
+	int* array = new int[size];
+	for(std::size_t i =0; i<size; i++) {
+		array[i] = rand();
+	}
+	int* array_copy = new int[size];
+	std::copy(array, array+size,array_copy);
+
+	auto begin = std::clock();
+	merge_sort_topdown(array,size);
+	auto end = std::clock();
+	std::cout<<"topdown: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
+
+	begin = std::clock();
+	//merge_sort_bottomup(array_copy,size);
+	insertion_sort_smarter(array_copy,size);
+	end = std::clock();
+	std::cout<<"insertion_sort_smarter: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
+	delete [] array;
+	delete [] array_copy;
+}
+
 
 int main() {
 
@@ -110,11 +133,15 @@ int main() {
 	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
 	//shell_sort(test_array, size);
 	//insertion_sort_smarter(test_array, size);
+
+
 	merge_sort_bottomup(test_array, size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
 	std::cout<<std::endl;
+
+	compare_merge_sorts(1e5);
 
 //	std::cout<<"test for memory leaks"<<std::endl;
 //	test_memory_leaks();
