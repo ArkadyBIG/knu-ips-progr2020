@@ -50,7 +50,7 @@ void shell_sort(int* array, std::size_t size) {
 
 
 
-void merge_topdown(int* source, int* destination, std::size_t begin, std::size_t middle, std::size_t end) {
+void merge(int* source, int* destination, std::size_t begin, std::size_t middle, std::size_t end) {
 	std::size_t first=begin, second = middle;
 	for (std::size_t i = begin; i<end; i++) {
 		if ((first<middle) && (second>=end || source[first]<=source[second])) {
@@ -71,13 +71,27 @@ void merge_sort_twoarrays(int* source, int* destination, std::size_t begin, std:
 	std::size_t middle = (end + begin)/2;
 	merge_sort_twoarrays(destination, source,begin,middle);
 	merge_sort_twoarrays(destination, source,middle,end);
-	merge_topdown(source, destination, begin, middle, end);
+	merge(source, destination, begin, middle, end);
 }
 
 void merge_sort_topdown(int* array, std::size_t size) {
 	int * destination = new int[size];
 	std::copy(array, array+size, destination);
 	merge_sort_twoarrays(destination, array, 0, size);
+	delete [] destination;
+}
+
+void merge_sort_bottomup(int* array, std::size_t size) {
+	int * destination = new int[size];
+
+	for (std::size_t width = 1; width<size; width*=2) {
+		for(std::size_t i = 0; i<size; i+=width*2) {
+			std::size_t middle = std::min(i+width, size);
+			std::size_t end = std::min(i+2*width, size);
+			merge(array, destination, i, middle, end);
+		}
+		std::copy(destination, destination+size,array);
+	}
 	delete [] destination;
 }
 
@@ -96,7 +110,7 @@ int main() {
 	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
 	//shell_sort(test_array, size);
 	//insertion_sort_smarter(test_array, size);
-	merge_sort_topdown(test_array, size);
+	merge_sort_bottomup(test_array, size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
