@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <ctime>
+#include <cassert>
 
 namespace lesson_k18_2020_02_11_sorting {
 
@@ -96,6 +97,47 @@ void merge_sort_bottomup(int* array, std::size_t size) {
 	delete [] destination;
 }
 
+std::size_t index_parent(std::size_t i) {
+	assert(i>0);
+	return (i-1)/2;
+}
+std::size_t index_left_child(std::size_t i) {
+	return 2*i+1;
+}
+std::size_t index_right_child(std::size_t i) {
+	return 2*i+2;
+}
+
+void sift_down(int* array, std::size_t start, std::size_t end) {
+	std::size_t root = start;
+	while (index_left_child(root)<=end) {
+		std::size_t child = index_left_child(root);
+		std::size_t temp = root;
+
+		if (array[temp]<array[child]) {
+			temp = child;
+		}
+		if (child+1<=end && array[temp]<array[child+1]) {
+			temp = child+1;
+		}
+		if (temp == root) {
+			return;
+		} else {
+			std::swap(array[root],array[temp]);
+			root = temp;
+		}
+	}
+}
+
+void heapify(int* array, std::size_t size) {
+	for (int start = index_parent(size-1); start>=0; start--) {
+		sift_down(array, start, size-1);
+	}
+
+}
+
+
+
 void test_memory_leaks() {
 	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1, -12345};
 	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
@@ -135,13 +177,14 @@ int main() {
 	//insertion_sort_smarter(test_array, size);
 
 
-	merge_sort_bottomup(test_array, size);
+	//merge_sort_bottomup(test_array, size);
+	heapify(test_array, size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
 	std::cout<<std::endl;
 
-	compare_merge_sorts(1e5);
+	//compare_merge_sorts(1e5);
 
 //	std::cout<<"test for memory leaks"<<std::endl;
 //	test_memory_leaks();
