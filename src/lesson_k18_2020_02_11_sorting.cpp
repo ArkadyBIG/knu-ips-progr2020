@@ -130,8 +130,9 @@ void sift_down(int* array, std::size_t start, std::size_t end) {
 }
 
 void heapify(int* array, std::size_t size) {
-	for (int start = index_parent(size-1); start>=0; start--) {
+	for (std::size_t start = index_parent(size-1); ; start--) {
 		sift_down(array, start, size-1);
+		if (start == 0) { return; }
 	}
 
 }
