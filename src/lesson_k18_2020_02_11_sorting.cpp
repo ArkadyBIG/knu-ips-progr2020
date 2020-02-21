@@ -137,7 +137,13 @@ void heapify(int* array, std::size_t size) {
 
 }
 
-
+void heap_sort(int* array, std::size_t size) {
+	heapify(array,size);
+	for(std::size_t end = size-1; end>0; end--) {
+		std::swap(array[end],array[0]);
+		sift_down(array,0, end-1);
+	}
+}
 
 void test_memory_leaks() {
 	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1, -12345};
@@ -179,7 +185,7 @@ int main() {
 
 
 	//merge_sort_bottomup(test_array, size);
-	heapify(test_array, size);
+	heap_sort(test_array, size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
