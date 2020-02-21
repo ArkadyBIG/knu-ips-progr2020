@@ -168,9 +168,10 @@ void compare_merge_sorts(std::size_t size) {
 
 	begin = std::clock();
 	//merge_sort_bottomup(array_copy,size);
-	insertion_sort_smarter(array_copy,size);
+	//insertion_sort_smarter(array_copy,size);
+	heap_sort(array_copy, size);
 	end = std::clock();
-	std::cout<<"insertion_sort_smarter: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
+	std::cout<<"heap_sort: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
 	delete [] array;
 	delete [] array_copy;
 }
@@ -191,7 +192,7 @@ int main() {
 	}
 	std::cout<<std::endl;
 
-	//compare_merge_sorts(1e5);
+	compare_merge_sorts(1e7);
 
 //	std::cout<<"test for memory leaks"<<std::endl;
 //	test_memory_leaks();
