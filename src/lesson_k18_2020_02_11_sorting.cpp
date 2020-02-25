@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include <algorithm>
+#include <map>
 #include <cstddef>
 #include <ctime>
 #include <cassert>
@@ -145,6 +146,44 @@ void heap_sort(int* array, std::size_t size) {
 	}
 }
 
+void counting_sort(int* array, std::size_t size){
+	std::size_t distinct_count = 0;
+	std::map<int,std::size_t> key_indices;
+	for(std::size_t i = 0; i<size; i++) {
+		int key = array[i];
+		if (key_indices.count(key) == 0) { //doesn't contain key
+			key_indices[key] = distinct_count;
+			distinct_count++;
+		}
+	}
+	std::size_t * counts = new std::size_t[distinct_count];
+	for (std::size_t i =0; i<distinct_count; i++) {
+		counts[i]=0;
+	}
+	for(std::size_t i = 0; i<size; i++) {
+		std::size_t index = key_indices[array[i]];
+		counts[index]++;
+	}
+	std::size_t total = 0;
+	for (std::size_t i = 0; i<distinct_count; i++) {
+		std::size_t new_total = total+counts[i];
+		counts[i] = total;
+		total = new_total;
+	}
+
+	int* output_array = new int[size];
+	for(std::size_t i = 0; i<size; i++) {
+		std::size_t index = key_indices[array[i]];
+		output_array[counts[index]]= array[i];
+		counts[index]++;
+	}
+
+	for(std::size_t i = 0; i<size; i++) {
+		array[i] = output_array[i];
+	}
+}
+
+
 void test_memory_leaks() {
 	int test_array[] = {2,74,1,-43, 23, 123, 55, -4, 0, 1, -12345};
 	std::size_t size = sizeof(test_array)/sizeof(test_array[0]);
@@ -168,10 +207,11 @@ void compare_merge_sorts(std::size_t size) {
 
 	begin = std::clock();
 	//merge_sort_bottomup(array_copy,size);
+	shell_sort(array_copy,size);
 	//insertion_sort_smarter(array_copy,size);
-	heap_sort(array_copy, size);
+	//heap_sort(array_copy, size);
 	end = std::clock();
-	std::cout<<"heap_sort: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
+	std::cout<<"shell_sort: "<<1000.0 * (end-begin) / CLOCKS_PER_SEC<<" ms"<<std::endl;
 	delete [] array;
 	delete [] array_copy;
 }
@@ -186,13 +226,14 @@ int main() {
 
 
 	//merge_sort_bottomup(test_array, size);
-	heap_sort(test_array, size);
+	//heap_sort(test_array, size);
+	counting_sort(test_array,size);
 	for(auto i: test_array) {
 		std::cout<<i<<" ";
 	}
 	std::cout<<std::endl;
 
-	compare_merge_sorts(1e7);
+	compare_merge_sorts(1e6);
 
 //	std::cout<<"test for memory leaks"<<std::endl;
 //	test_memory_leaks();
