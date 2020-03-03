@@ -32,25 +32,34 @@ struct SparseList {
 	}
 
 	void insert(int value, std::size_t index) {
+		if (value == 0) {
+			return;
+		}
 		if (index>size) {
 			throw std::invalid_argument("Index greater than size");
 		}
 		SparseListNode* current = head;
 		if (current == nullptr) {
 			head = new SparseListNode(value, index);
-			size++;
+			//size++;
 			nonempty_size++;
 			return;
 		}
-		std::size_t current_position = 0;
+		//std::size_t current_position = 0;
 		while (current) {
-			if (current_position>index) {
+			if( ! current->next ) {
 				break;
 			}
-			if(current->next) {
-				current = current->next;
+			if (index > current->next->index) {
+				break;
 			}
-			current_position++;
+//			if (current_position>index) {
+//				break;
+//			}
+
+			current = current->next;
+
+//			current_position++;
 		}
 
 		SparseListNode* new_node = new SparseListNode(value, index, current->next);
@@ -68,6 +77,8 @@ int main() {
 
 	list.insert(10, 3);
 	list.insert(-12, 10);
+	list.insert(333, 5);
+	list.insert(678, 21);
 	list.print_with_index();
 	return 0;
 }
